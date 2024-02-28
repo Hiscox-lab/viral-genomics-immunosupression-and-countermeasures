@@ -1,6 +1,27 @@
-# Comparison of Molnupiravir with PF-07321332 treatment either individually or combination in immune supressed mice infected with SARS-CoV-2 as a model for severe COVID-19.
+# The effect of molnupiravir and nirmatrelvir on SARS-CoV-2 genome diversity in infected and immune suppressed mice
 
-add author list and affiliations when finalised
+Rebekah Penrice-Randal<sup>1*†</sup>, Eleanor G. Bentley<sup>1*</sup>, Parul Sharma<sup>1</sup>, Adam Kirby<sup>1</sup>, I’ah Donovan-Banfield<sup>1,2</sup>, Anja Kipar<sup>1,3</sup>, Daniele F. Mega<sup>1</sup>, Chloe Bramwell<sup>1,4</sup>, Joanne Sharp<sup>4</sup>, Andrew Owen<sup>4,5</sup>, Julian A. Hiscox<sup>1,2,6</sup> and James P. Stewart<sup>1,5</sup>.
+
+
+<sup>1</sup>Department of Infection Biology and Microbiomes, University of Liverpool, Liverpool, UK.
+
+<sup>2</sup>NIHR Health Protection Research Unit in Emerging and Zoonotic Infections, Liverpool, UK.
+
+<sup>3</sup>Laboratory for Animal Model Pathology, Institute of Veterinary Pathology, Vetsuisse Faculty, University of Zurich, Switzerland.
+
+<sup>4</sup>Department of Pharmacology and Therapeutics, University of Liverpool, UK.
+
+<sup>5</sup>Centre of Excellence in Long-acting Therapeutics (CELT), University of Liverpool, UK.
+
+<sup>6</sup>A*STAR Infectious Diseases Laboratories (A*STAR ID Labs), Agency for Science, Technology and Research (A*STAR), Singapore.
+
+
+
+<sup>*</sup>These authors contributed equally.
+
+<sup>†</sup> Corresponding author: rebee@liverpool.ac.uk 
+
+
 
 ## Raw data avaliable at Short Read Archive (SRA): Project Acession Number: PRJNA886870
 
