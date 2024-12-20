@@ -105,14 +105,31 @@ melt_S655_final <- melt_S655_1 %>% filter(AA_rank == Prop_AA_name)
 melt_S655_final$Cohort <- factor(melt_S655_final$Cohort, levels=c("Vehicle", "Cyclophosphamide only", "Molnupiravir","Cyclophosphamide and Molnupiravir","Cyclophosphamide and Pfizer","Cyclophosphamide, Pfizer and Molnupiravir"))
 
 
-plot_S655_mv_line <- ggplot(melt_S655_final %>% filter(AA_rank!="TrdAA") %>% filter(AA!="<NA>"), aes(x=DPI, y=Prop_AA, colour=AA, shape = Animal.label)) + 
-  geom_point(size=2.5) + geom_line() +
+melt_S655_final <- data.frame(lapply(melt_S655_final, function(x) gsub("Pfizer", "Nirmatrelvir", x)))
+melt_S655_final$Prop_AA <-as.numeric(melt_S655_final$Prop_AA)
+levels(melt_S655_final$Cohort)<-c("Vehicle","Cyclophosphamide only","Molnupiravir","Cyclophosphamide and Molnupiravir","Cyclophosphamide and Nirmatrelvir","Cyclophosphamide, Nirmatrelvir and Molnupiravir")
+melt_S655_final$DPI<-as.numeric(melt_S655_final$DPI)
+melt_S655_final$AA<-as.factor(melt_S655_final$AA)
+melt_S655_final$Animal.label<-as.factor(melt_S655_final$Animal.label)
+
+
+melt_S655_final$Cohort <- factor(melt_S655_final$Cohort,
+                               levels = c("Vehicle", "Cyclophosphamide only", "Molnupiravir", 
+                                          "Cyclophosphamide and Molnupiravir", 
+                                          "Cyclophosphamide and Nirmatrelvir", 
+                                          "Cyclophosphamide, Nirmatrelvir and Molnupiravir")
+)
+
+plot_S655_mv_line <- ggplot(melt_S655_final %>% 
+                              filter(AA_rank!="TrdAA") %>% filter(AA!="<NA>"),
+                            aes(x=DPI, y=Prop_AA, colour=AA, shape =Animal.label))+ 
+  geom_point(size=2.5) +  geom_line() +
   facet_grid(Sample.Type~Cohort, 
              labeller = labeller(Cohort = label_wrap_gen(10))) +
   #scale_x_continuous(breaks=c(0,1,4,6,7), limits = c(0,7)) +
   ylim(0,1) + ylab("Proportion of amino acid at S:655\n") + xlab("\nDPI") +
   scale_colour_viridis_d(begin = 0, end = 0.8, direction=-1) +
-  theme_bw() +
+  theme_pubr() +
   labs(colour="Amino\nacid") +
   labs(shape="Animal") +
   theme(axis.text = element_text(colour="black", size=12, vjust=0.2),
@@ -134,53 +151,8 @@ ggsave(plot_S655_mv_line, filename=("~/projects/cyclophosphamide-mice/nimagen2/f
 ggsave(plot_S655_mv_line, filename=("~/projects/cyclophosphamide-mice/nimagen2/figures2/S655_mv_line.tiff"), device="tiff", dpi=300, width=14, height=6)
 
 
-#### just S 655 labels ####
-
-all_aa_sp_orf8 <- all_aa_sp %>% filter(Protein=="ORF8") %>% filter(AAPosition =="27")
-mut1_AA<- all_aa_sp_orf8[,"TopAA"]
-mut2_AA<- all_aa_sp_orf8[, "SndAA"]
-mut3_AA<- all_aa_sp_orf8[, "TrdAA"]
-mut_label_AA_655 <- c(mut1_AA, mut2_AA, mut3_AA)
-
-#summarise for S:655
-S_655 <- select(all_aa_sp, 3:4, 14, 16, 18, 27:29, 34:42) %>% filter(Protein=="ORF8") %>% filter(AAPosition =="27")
-#melt AA first
-melt_S655_ <- pivot_longer(S_655, cols=c("TopAA", "SndAA", "TrdAA"), names_to = "AA_rank", values_to = "AA")
-#then melt proportions
-melt_S655_1 <- pivot_longer(melt_S655_, cols=c("ProportionTopAA", "ProportionSndAA", "ProportionTrdAA"), names_to = "Prop_AA_name", values_to = "Prop_AA")
-#melting props gives a 3 rows per AA so changing Prop_AA_names so that they match format of AA_rank
-melt_S655_1$Prop_AA_name <- gsub("Proportion", "", melt_S655_1$Prop_AA_name)
-#keep only rows where AA_rank and Prop_AA_name match to get only the value that matches the rank 
-melt_S655_final <- melt_S655_1 %>% filter(AA_rank == Prop_AA_name)
 
 
-
-plot_S655_mv_line <- ggplot(melt_S655_final %>% filter(AA_rank!="TrdAA") %>% filter(AA!="<NA>"), aes(x=DPI, y=Prop_AA, colour=AA, shape = Animal.label)) + 
-  geom_point(size=2.5) + geom_line() +
-  facet_grid(Sample.Type~Cohort, 
-             labeller = labeller(Cohort = label_wrap_gen(10))) +
-  ylim(0,1) + ylab("Proportion of amino acid at S:655\n") + xlab("\nDPI") +
-  scale_colour_viridis_d(begin = 0, end = 0.8, direction=-1) +
-  theme_bw() +
-  labs(colour="Amino\nacid") +
-  labs(shape="Animal") +
-  theme(axis.text = element_text(colour="black", size=12, vjust=0.2),
-        axis.title.x = element_text(face="bold"),
-        axis.title.y = element_text(face="bold", vjust=2),
-        strip.background = element_rect(size=0.5, linetype="solid", fill="white"),
-        strip.text = element_text(size = 12, color = "black", face="bold"),
-        panel.grid.major = element_blank(), 
-        panel.grid.minor = element_blank(),
-        legend.title = element_text(face="bold", hjust=0.5),
-        legend.text = element_text(size=10))
-
-plot_S655_mv_line
-
-#write out
-#png for git 
-ggsave(plot_S655_mv_line, filename=("~/projects/cyclophosphamide-mice/nimagen/figures/S655_mv_line.png"), device="png", dpi=300, width=14, height=6)
-#tiff for pub 
-ggsave(plot_S655_mv_line, filename=("~/projects/cyclophosphamide-mice/nimagen/figures/S655_mv_line.tiff"), device="tiff", dpi=300, width=14, height=6)
 
 
 
